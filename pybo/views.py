@@ -65,14 +65,15 @@ def question_modify(request, question_id):
         messages.error(request, '수정권한이 없습니다')
         return redirect('pybo:detail', question_id=question.id)
     if request.method == "POST":
-        form = QuestionForm(request.POST, instance=question)
+        print(request.POST)
+        form = QuestionForm(request.POST, instance=question) #폼이 Question 모델 인스턴스의 데이터를 가져와서 업데이트
         if form.is_valid():
-            question = form.save(commit=False)
+            question = form.save(commit=False) # 모델 인스턴스 반환
             question.modify_date = timezone.now()  # 수정일시 저장
             question.save()
             return redirect('pybo:detail', question_id=question.id)
     else:
-        form = QuestionForm(instance=question)
+        form = QuestionForm(instance=question) #폼이 Question 모델 인스턴스의 데이터를 가져와서 폼 필드에 미리 채워짐
     context = {'form': form}
     return render(request, 'pybo/question_form.html', context)
 
